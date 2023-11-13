@@ -20,7 +20,7 @@
         <div class="flex items-center justify-center">
             <a href="landing.php"><img src="images/logo1.png" alt="" class="h-[60px] w-[80px]"></a>
             <!-- Navigation -->
-            <div class="flex items-center justify-between h-full font-body w-[18em] ml-8 font-bold text-base">
+            <div class="flex items-center justify-between h-full font-body w-[20em] ml-8 font-bold text-base">
                 <a href="#" class="hover:text-red-500 hover:text-xl">Home</a>
                 <a href="" class="hover:text-red-500 hover:text-xl">Movies</a>
                 <a href="" class="hover:text-red-500 hover:text-xl">New & Popular</a>
