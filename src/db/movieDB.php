@@ -56,7 +56,6 @@ class DB {
     echo $this->res;
   }
 
-
   public function __destruct() {
     if($this->mysql) {
       $this->mysql->close();
