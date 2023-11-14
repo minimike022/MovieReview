@@ -19,7 +19,7 @@
     </div>
 
     <div class="w-[25em] h-[30em] bg-black absolute mt-20 rounded-md bg-opacity-80">
-    <a href="landing.php" class="w-full mt-4"><img src="images/x.svg" alt="" class="mt-4 h-[35px] w-[35px] absolute right-[3em]"></a>
+    <a href="index.php" class="w-full mt-4"><img src="images/x.svg" alt="" class="mt-4 h-[35px] w-[35px] absolute right-[3em]"></a>
         <h1 class="ml-11 text-3xl font-bold mt-8">
             Sign In
         </h1>

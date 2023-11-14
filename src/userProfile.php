@@ -21,7 +21,7 @@
             <a href="landing.php"><img src="images/logo1.png" alt="" class="h-[60px] w-[80px]"></a>
             <!-- Navigation -->
             <div class="flex items-center justify-between h-full font-body w-[23em] ml-8 font-bold text-base">
-                <a href="landing.php" class="hover:text-red-500">Home</a>
+                <a href="index.php" class="hover:text-red-500">Home</a>
                 <a href="" class="hover:text-red-500">Movies</a>
                 <a href="" class="hover:text-red-500">New & Popular</a>
                 <a href="" class="hover:text-red-500">My Reviews</a>
