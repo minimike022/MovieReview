@@ -11,9 +11,6 @@
     </style>
 </head>
 <body>
-    <!-- Admin  Nav Bar -->
-    <div>
-        
-    </div>
+    <h1>Hello World</h1>
 </body>
 </html>

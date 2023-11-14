@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Signup paget</title>
     <style>
         <?php
 
@@ -47,7 +47,6 @@
         $("#addUser").on("submit", function(e) {
             e.preventDefault();
             var username = $('#uname').val();
-            console.log(username);
             var datas = $(this).serializeArray();
             var data_array = {};
             var hasEmptyFields = false;
@@ -65,6 +64,7 @@
                 $.post("ajaxController.php", {
                     uname:username
                 }, function(result) {
+                    console.log(result) 
                     if(result == "0") {
                         $.ajax({
                             url:"ajaxController.php",
@@ -74,7 +74,7 @@
                                 datas:data_array,
                             },
                             success:function(result) {
-                                console.log("successfully Added!")
+                                
                                 location.href="userInfoForms.php";
                             }
                         })

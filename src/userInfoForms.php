@@ -8,7 +8,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>User Profile</title>
     <style>
         <?php
             include "css/output.css";
@@ -107,7 +107,7 @@ session_start();
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#addUserInfo").on('click',"#submit", function(e) {
+        $("#addUserInfo").on("submit", function(e) {
             e.preventDefault();
 
             var datas = $(this).serializeArray();
@@ -133,7 +133,7 @@ session_start();
                     },
                     success: function(result) {
                         console.log(result);
-                        location.href = "landing.php";
+                        location.href = "index.php";
                     },
                     error: function(error) {
                         console.log(error);

@@ -2,7 +2,8 @@
 $driver = new mysqli_driver();
 $driver->report_mode = MYSQLI_REPORT_STRICT | MYSQLI_REPORT_ERROR;
 
-class DB {
+class DB
+{
   private $servername = "localhost";
   private $username = "root";
   private $password = "";
@@ -22,42 +23,58 @@ class DB {
     }
   }
 
-  public function select($table, $row = "*", $where = null) {
+  public function select($table, $row = "*", $where = null)
+  {
     $sql = "SELECT $row FROM $table" . ($where == null ? '' : "WHERE $where");
     $result = $this->mysql->query($sql);
     $this->fetchSelect($result);
   }
 
-  private function fetchSelect($result) {
+  private function fetchSelect($result)
+  {
     $records = array();
-    while($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
       array_push($records, $row);
     }
     $this->res = $records;
   }
 
-  public function insert($table, $data) {
+  public function insert($table, $data)
+  {
     $table_columns = implode(',', array_keys($data));
     $table_values = implode("','", $data);
     $sql = "INSERT INTO $table($table_columns) VALUES ('$table_values')";
     $this->res = $this->mysql->query($sql);
   }
 
-  public function checkUsername($uname) {
-    $sql = "SELECT * FROM users WHERE username = '". $uname ."'";
+  public function checkUsername($uname)
+  {
+    $sql = "SELECT * FROM users WHERE username = '" . $uname . "'";
     $this->res = $this->mysql->query($sql);
-    echo mysqli_num_rows($this->res);  
+    echo mysqli_num_rows($this->res);
   }
 
 
-  public function retrieveID($uname, $pword) {
-    $sql = "SELECT userID from users WHERE username = '".$uname."' AND password = '".$pword."'";
-    $this->res = $this->mysql->query($sql);
-    echo $this->res;
+  public function login($uname, $pword) {
+    $hashed = password_hash($pword, PASSWORD_BCRYPT);
+    $sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+    $stmt = $this->res->getConnection()->prepare($sql);
+    $stmt->bind_param("ss", $uname, $hashed);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 1) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  public function __destruct() {
-    if($this->mysql) {
+
+  public function __destruct()
+  {
+    if ($this->mysql) {
       $this->mysql->close();
     }
   }

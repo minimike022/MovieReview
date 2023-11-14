@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login Page</title>
     <style>
-    <?php
-    
+        <?php
+
         include "css/output.css";
-    
-    ?>
+
+        ?>
     </style>
     <script type="text/javascript" src="js/jquery.min.js"></script>
 </head>
+
 <body class="flex justify-center font-body text-white">
     <div class="w-screen h-screen relative bg-black bg-opacity-30">
-    <img src="images/netflixlogo.webp" alt="" class="w-screen h-screen objct-cover absolute mix-blend-overlay">
+        <img src="images/netflixlogo.webp" alt="" class="w-screen h-screen objct-cover absolute mix-blend-overlay">
     </div>
 
     <div class="w-[25em] h-[30em] bg-black absolute mt-20 rounded-md bg-opacity-80">
-    <a href="index.php" class="w-full mt-4"><img src="images/x.svg" alt="" class="mt-4 h-[35px] w-[35px] absolute right-[3em]"></a>
+        <a href="index.php" class="w-full mt-4"><img src="images/x.svg" alt="" class="mt-4 h-[35px] w-[35px] absolute right-[3em]"></a>
         <h1 class="ml-11 text-3xl font-bold mt-8">
             Sign In
         </h1>
@@ -37,34 +39,51 @@
                 <img src="images/Facebook.png" alt="" class="h-[35px] w-[35px]">
                 <img src="images/twitter.png" alt="" class="h-[35px] w-[35px]">
             </div>
-            <a href="signup.php" class="mt-8"><h2>Don't have an account?</h2></a>
+            <a href="signup.php" class="mt-8">
+                <h2>Don't have an account?</h2>
+            </a>
         </div>
     </div>
 </body>
 
-<script type = "text/javascript">
-    $(document).ready(function() { 
+<script type="text/javascript">
+    $(document).ready(function() {
         $("#loginUser").on("submit", function(e) {
-            e.preventDefault();   
+            e.preventDefault();
             let uname = $('#uname').val();
             let pword = $('#pword').val();
+            var hasEmptyFields = false;
+            var formData = $(this).serialize();
 
-            $.ajax({
-                url:"ajaxController.php",
-                method:"POST",
-                data: {
-                    "loggingIn": true,
-                    username:uname,
-                    password:pword,
-                },
-                success:function(result) {
-                    console.log(result);
-                }
-            })
-            
-    })
-    }) 
-    
-    
+            if (hasEmptyFields) {
+                alert('Please fill in all fields');
+            } else {
+                $.ajax({
+                    url: "ajaxController.php",
+                    method: "POST",
+                    data: {
+                        "loggingIn": true,
+                        username: uname,
+                        password: pword,
+                    },
+                    success: function(result) {
+                        console.log(result);
+
+                        if (result === "success") {
+                            location.href="index.php";
+                        } else {
+                            alert("Invalid username and password. Try again.");
+                        }
+                        
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        alert("Oops something went wrong!");
+                    }
+                });
+            }
+        });
+    });
 </script>
+
 </html>
