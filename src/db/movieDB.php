@@ -23,9 +23,9 @@ class DB
     }
   }
 
-  public function select($table, $row = "*", $where = null)
+  public function select($table, $where = null)
   {
-    $sql = "SELECT $row FROM $table" . ($where == null ? '' : "WHERE $where");
+    $sql = "SELECT * FROM $table" . ($where == null ? '' : "WHERE $where");
     $result = $this->mysql->query($sql);
     $this->fetchSelect($result);
   }
@@ -37,6 +37,7 @@ class DB
       array_push($records, $row);
     }
     $this->res = $records;
+
   }
 
   public function insert($table, $data)
@@ -49,26 +50,30 @@ class DB
 
   public function checkUsername($uname)
   {
-    $sql = "SELECT * FROM users WHERE username = '" . $uname . "'";
+    $sql = "SELECT * FROM users WHERE uname = '" . $uname . "'";
     $this->res = $this->mysql->query($sql);
     echo mysqli_num_rows($this->res);
   }
 
-
+  //retrieve Username
+  
   public function login($uname, $pword) {
-    $hashed = password_hash($pword, PASSWORD_BCRYPT);
-    $sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-    $stmt = $this->res->getConnection()->prepare($sql);
-    $stmt->bind_param("ss", $uname, $hashed);
-    $stmt->execute();
+    
+    $sql1 = "SELECT uname, pword FROM users WHERE uname = '$uname'";
+    $result = $this->mysql->query($sql1);
+    while ($row = $result->fetch_assoc()) {
+      $encPass = $row["pword"];
+      $password = $pword;
+      $md5Pword = md5($password);
+      if($md5Pword == $encPass) {
+        $sql2 = "SELECT * FROM users WHERE uname = '$uname'";
+        $result2 = $this->mysql->query($sql2);
+        $this->fetchSelect($result2);
+      }
 
-    $result = $stmt->get_result();
-
-    if ($result->num_rows == 1) {
-      return true;
-    } else {
-      return false;
+     
     }
+    
   }
 
 

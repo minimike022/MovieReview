@@ -74,8 +74,8 @@
                                 datas:data_array,
                             },
                             success:function(result) {
-                                
-                                location.href="userInfoForms.php";
+                                console.log(result)
+                                //location.href="userInfoForms.php";
                             }
                         })
                     }else if(result != 0){

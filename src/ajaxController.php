@@ -11,10 +11,10 @@ if (isset($_POST['getStudents'])) {
 
 //Login Authentication Users
 if(isset($_POST["loggingIn"])) {
-  $username = $_POST["uname"];
-  $password = $_POST["pword"];
-  $login = $db->login($username, $password);
-  echo json_encode(["success" => $login]);
+  $username = $_POST["username"];
+  $password = $_POST["password"];
+  $db->login($username, $password);
+  echo json_encode($db->res);
 }
 
 
@@ -31,12 +31,13 @@ if (isset($_POST['uname'])) {
 if(isset($_POST['addUser'])) {
   $postData = $_POST['datas'];
   $password = $postData['pword'];
-  $hashed = password_hash($password, PASSWORD_BCRYPT);
+  $md5Pass = md5($password);
   $dataArray = array(
-    'username'=> $postData['uname'], 'password' => $hashed, 'email' => $postData['email'],
+    'uname'=> $postData['uname'], 'pword' => $md5Pass, 'email' => $postData['email'],
   );
   $result = $db->insert('users', $dataArray);
   echo json_encode($result);
+
 }
 
 

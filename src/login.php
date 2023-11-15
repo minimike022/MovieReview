@@ -67,14 +67,11 @@
                         password: pword,
                     },
                     success: function(result) {
-                        console.log(result);
-
-                        if (result === "success") {
-                            location.href="index.php";
-                        } else {
-                            alert("Invalid username and password. Try again.");
-                        }
-                        
+                        var datas = JSON.parse(result)
+                        datas.forEach(function(data) {
+                            console.log(data['userID'])
+                        }) 
+                           
                     },
                     error: function(error) {
                         console.log(error);
