@@ -61,15 +61,19 @@ class DB
     
     $sql1 = "SELECT uname, pword FROM users WHERE uname = '$uname'";
     $result = $this->mysql->query($sql1);
-    while ($row = $result->fetch_assoc()) {
-      $encPass = $row["pword"];
-      $password = $pword;
-      $md5Pword = md5($password);
-      if($md5Pword == $encPass) {
-        $sql2 = "SELECT * FROM users WHERE uname = '$uname'";
-        $result2 = $this->mysql->query($sql2);
-        $this->fetchSelect($result2);
+    if ($result->num_rows > 0) {
+      while ($row = $result->fetch_assoc()) {
+        $encPass = $row["pword"];
+        $password = $pword;
+        $md5Pword = md5($password);
+        if($md5Pword == $encPass) {
+          $sql2 = "SELECT * FROM users WHERE uname = '$uname'";
+          $result2 = $this->mysql->query($sql2);
+          $this->fetchSelect($result2);
+        }
       }
+    }else {
+      $this->res = 0;
     }
     
   }

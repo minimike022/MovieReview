@@ -194,8 +194,13 @@ session_start();
             "isLoggedin":true
         },
         success:function(result) {
-            if(result != null) {
-                
+            if(result == 0) {
+                loggedIn.style.display = "none";
+                notLoggedIn.style.display = "block"
+            }
+            else {
+                loggedIn.style.display = "block";
+                notLoggedIn.style.display = "none"
             }
         }
     })

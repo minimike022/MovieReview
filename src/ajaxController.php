@@ -26,7 +26,12 @@ if(isset($_POST['datas'])) {
 //Logged In
 if(isset($_POST['isLoggedin'])) {
   session_start();
-  echo $_SESSION['userID'];
+  if($_SESSION != null) {
+    echo $_SESSION['userID'];
+  }
+  else {
+    echo "0";
+  }
 
 }
 
