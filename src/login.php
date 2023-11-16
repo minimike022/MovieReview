@@ -69,7 +69,15 @@
                     success: function(result) {
                         var datas = JSON.parse(result)
                         datas.forEach(function(data) {
-                            console.log(data['userID'])
+                            var dataID = data['userID'];
+                            $.ajax({
+                                url: "ajaxController.php",
+                                method: "POST",
+                                data: {datas:dataID},
+                                success:function(result) {
+                                    location.href = "index.php";
+                                }
+                            })
                         }) 
                            
                     },

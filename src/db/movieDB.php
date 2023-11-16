@@ -70,10 +70,16 @@ class DB
         $result2 = $this->mysql->query($sql2);
         $this->fetchSelect($result2);
       }
-
-     
     }
     
+  }
+
+  public function fetchMovies($genre) {
+    $sql = "SELECT * FROM movies WHERE movieGenre = '$genre'";
+    $result = $this->mysql->query($sql);
+    if($result->num_rows > 0) {
+      $this->fetchSelect($result);
+    }
   }
 
 

@@ -1,3 +1,8 @@
+<?php
+session_start();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,7 +52,7 @@
                 <a href="userProfile.php" class="h-[2.5em] w-24 flex items-center justify-center rounded-md hover:bg-red-500 hover:border-none active:bg-red-600">
                     <h1 class="text-white font-bold">Profile</h1>
                 </a> 
-                <a href="login.php" class="h-[2.5em] w-24 flex items-center justify-center bg-white rounded-md hover:bg-red-500 hover:border-none active:bg-red-600 text-black hover:text-white">
+                <a href="logout.php" class="h-[2.5em] w-24 flex items-center justify-center bg-white rounded-md hover:bg-red-500 hover:border-none active:bg-red-600 text-black hover:text-white">
                     <h1 class="font-bold">Sign Out</h1>
                 </a>
             </div>
@@ -143,29 +148,59 @@
 <script script="text/javascript">
     var loggedIn = document.getElementById("loggedIn");
     var notLoggedIn = document.getElementById("notloggedIn");
-    var isLoggedIn = true;
-    if(isLoggedIn === false) {
-        notLoggedIn.style.display = "block"
-        loggedIn.style.display = "none"
-    }
-    else {
-        notLoggedIn.style.display = "none"
-        loggedIn.style.display = "block"
-
-    }
 
     const moveToMovie = () => {
         location.href = "landingMovie.php";
     }
 
-    var movies = 3;
-    var movieTr = document.getElementById("actMovies");
-    movieTr = ` `
-    for(var i = 0; i != movies; i++) {
-        movieTr += `<td class='flex items-center flex-col ml-10'><div class='bg-white h-52 w-44'></div>`
-        movieTr += `<h1>`+i+`</h1></td>`
+    const loadMovie = () => {
+        $.ajax({
+            url:"ajaxController.php",
+            method: "POST",
+            data: {"displayMovies": true},
+            success:function(result) {
+                var datas = JSON.parse(result);
+                var movieTr = ` `
+                datas.forEach(function(data){
+                    movieTr += `<td class='flex items-center flex-col ml-10'><div class='bg-white h-52 w-44'></div>`
+                    movieTr += `<h1>`+data['movieTitle']+`</h1></td>`
+                })
+                $("#actMovies").html(movieTr);
+            }
+        })
     }
-    $("#actMovies").html(movieTr);
+
+    //var movies = 3;
+    
+    /*for(var i = 0; i != movies; i++) {
+        
+    }
+    
+    */
+   $(document).ready(function() {
+        loadMovie();
+
+         $.ajax({
+        url:"ajaxController.php",
+        method: "POST",
+        data: {
+            "isLoggedin":true
+        },
+        success:function(result) {
+            var checkRes = result;
+            if (checkRes == 0) {
+                notLoggedIn.style.display = "block"
+                loggedIn.style.display = "none"
+            }else{
+                notLoggedIn.style.display = "none"
+                loggedIn.style.display = "block"
+            }
+            console.log(checkRes);
+            console.log(result)
+        }
+    })
+   })
+   
 
 </script>
 </html>
