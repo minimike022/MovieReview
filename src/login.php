@@ -25,6 +25,7 @@
         <h1 class="ml-11 text-3xl font-bold mt-8">
             Sign In
         </h1>
+        <h2 id="validation">Username or Password is Incorrect</h2>
         <form action="" method="POST" id="loginUser" class="flex flex-col w-full items-center mt-6">
             <input type="text" id="uname" name="uname" placeholder="Username" class="focus:outline-none h-[2.8em] rounded-md bg-[#3D3C3A] w-[19em] pl-5">
             <input type="password" id="pword" name="pword" placeholder="Password" class="focus:outline-none h-[2.8em] rounded-md bg-[#3D3C3A] w-[19em] pl-5 mt-5">
@@ -44,9 +45,12 @@
             </a>
         </div>
     </div>
+
 </body>
 
 <script type="text/javascript">
+    var validation = document.getElementById('validation');
+    validation.style.display = "none"
     $(document).ready(function() {
         $("#loginUser").on("submit", function(e) {
             e.preventDefault();
@@ -70,14 +74,21 @@
                         var datas = JSON.parse(result)
                         datas.forEach(function(data) {
                             var dataID = data['userID'];
-                            $.ajax({
-                                url: "ajaxController.php",
-                                method: "POST",
-                                data: {datas:dataID},
-                                success:function(result) {
-                                    location.href = "index.php";
+                            var usname = data['uname']
+                            if(uname == ) {
+                                if(pword == data['pword']) {
+                                    $.ajax({
+                                        url: "ajaxController.php",
+                                        method: "POST",
+                                        data: {datas:dataID},
+                                        success:function(result) {   
+                                        }
+                                    })
+                                }else {
+                                    validation.style.display = "block"
                                 }
-                            })
+                            }
+                            
                         }) 
                            
                     },

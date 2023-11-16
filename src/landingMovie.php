@@ -1,3 +1,8 @@
+<?php
+
+    session_start();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -108,9 +113,43 @@
     </div>
 </body>
 <script type="text/javascript">
-    document.getElementById("movieGenre").innerText += " " + "Hello World"
-    document.getElementById("movieTitle").textContent = message;
-    document.getElementById("moviePoster").src = "images/twitter.png";
+    
+
+    $(document).ready(function() {
+        $.ajax({
+            url: "ajaxController.php",
+            method: "POST",
+            data: {
+                "getMovieID": true
+            },
+            success:function(result){
+                var movieID = JSON.parse(result)
+                console.log(movieID);
+                $.ajax({
+                    url:"ajaxController.php",
+                    method:"POST",
+                    data: {
+                        "getMovieData": true,
+                        movieId:movieID,
+                    },
+                    success:function(result) {
+                        var movieData = JSON.parse(result);
+                        console.log(movieData)
+                        movieData.forEach(function(data) {
+                            document.getElementById("movieTitle").textContent = data['movieTitle'];
+                            document.getElementById("movieGenre").textContent +=" " + data['movieGenre'];
+                            document.getElementById("movieRelease").textContent +=" " + data['movieDate'];
+                            document.getElementById("movieDesc").textContent = data['movieDescription'];
+                        })
+                        
+                    }
+
+                })
+            }
+        })
+    })
+
+    
 
 </script>
 

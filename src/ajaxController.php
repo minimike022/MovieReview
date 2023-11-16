@@ -23,14 +23,10 @@ if(isset($_POST['datas'])) {
   $_SESSION['userID'] = $_POST['datas'];
   echo $_SESSION['userID'];
 }
-
+//Logged In
 if(isset($_POST['isLoggedin'])) {
-  if(isset($_SESSION['userID'])) {
-    echo json_encode(1);
-    
-  }else {
-    echo json_encode(0);
-  }
+  session_start();
+  echo $_SESSION['userID'];
 
 }
 
@@ -45,6 +41,7 @@ if (isset($_POST['uname'])) {
   }
 }
 
+//Adding Movie Into Admin Websit
 if(isset($_POST['AddMovie'])) {
   $postData = $_POST['movieData'];
   $dataArray = array(
@@ -55,6 +52,8 @@ if(isset($_POST['AddMovie'])) {
 
 }
 
+
+//Add User Login Info
 if(isset($_POST['addUser'])) {
   $postData = $_POST['datas'];
   $password = $postData['pword'];
@@ -68,7 +67,7 @@ if(isset($_POST['addUser'])) {
 }
 
 
-
+//Add User Info
 if (isset($_POST['addUserInfo'])) {
   $postData = $_POST['datas'];
 
@@ -91,7 +90,27 @@ if (isset($_POST['addUserInfo'])) {
   }
 }
 
+//Display Movies
 if(isset($_POST['displayMovies'])) {
-    $db->fetchMovies();
+    $db->fetchMovies("movieGenre","Action");
     echo json_encode($db->res);
 }
+
+if(isset($_POST['deliveringData'])) {
+  session_start();
+  $_SESSION['movieId'] = $_POST['dataId'];
+  echo $_SESSION['movieId'];
+}
+
+if(isset($_POST['getMovieID'])) {
+  session_start();
+  $movieID = $_SESSION['movieId'];
+  echo $movieID;
+}
+
+if(isset($_POST['getMovieData'])) {
+  $movieID = $_POST['movieId'];
+  $db->fetchMovies('movieID',$movieID);
+  echo json_encode($db->res);
+}
+

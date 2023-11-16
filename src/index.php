@@ -162,23 +162,30 @@ session_start();
                 var datas = JSON.parse(result);
                 var movieTr = ` `
                 datas.forEach(function(data){
-                    movieTr += `<td class='flex items-center flex-col ml-10'><div class='bg-white h-52 w-44'></div>`
+                    movieTr += `<td class='flex items-center flex-col ml-10'><button id="button" data-Ids=`+data['movieID']+` class='bg-white h-52 w-44'></button>`
                     movieTr += `<h1>`+data['movieTitle']+`</h1></td>`
                 })
                 $("#actMovies").html(movieTr);
             }
         })
     }
-
-    //var movies = 3;
-    
-    /*for(var i = 0; i != movies; i++) {
-        
-    }
-    
-    */
    $(document).ready(function() {
         loadMovie();
+        
+    $(document).on("click", "#button", function(e) {
+        var dataID = $(this).attr('data-Ids');
+        $.ajax({
+            url: "ajaxController.php",
+            method:"POST",
+            data:{
+                "deliveringData":true,
+                dataId:dataID},
+            success:function()  {
+                console.log("Success");
+                location.href = "landingMovie.php"
+            }
+        }) 
+    })
 
          $.ajax({
         url:"ajaxController.php",
@@ -187,16 +194,9 @@ session_start();
             "isLoggedin":true
         },
         success:function(result) {
-            var checkRes = result;
-            if (checkRes == 0) {
-                notLoggedIn.style.display = "block"
-                loggedIn.style.display = "none"
-            }else{
-                notLoggedIn.style.display = "none"
-                loggedIn.style.display = "block"
+            if(result != null) {
+                
             }
-            console.log(checkRes);
-            console.log(result)
         }
     })
    })

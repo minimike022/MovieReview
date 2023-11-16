@@ -74,8 +74,8 @@ class DB
     
   }
 
-  public function fetchMovies($genre) {
-    $sql = "SELECT * FROM movies WHERE movieGenre = '$genre'";
+  public function fetchMovies($category,$genre) {
+    $sql = "SELECT * FROM movies WHERE ($category) = '$genre'";
     $result = $this->mysql->query($sql);
     if($result->num_rows > 0) {
       $this->fetchSelect($result);
