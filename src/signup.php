@@ -41,16 +41,15 @@
     var unameForm = document.getElementById("uname");
     var validateTag = document.getElementById("validationTag");
     var emailForm = document.getElementById("email");
-
+    
     validateTag.style.display = "none";
     $(document).ready(function() {
         $("#addUser").on("submit", function(e) {
             e.preventDefault();
-            var username = $('#uname').val();
             var datas = $(this).serializeArray();
+            var username = $('#uname').val();
             var data_array = {};
             var hasEmptyFields = false;
-            console.log(datas);
             $.map(datas, function(data, index) {
                 if (data['value'].trim() === '') {
                     hasEmptyFields = true;
@@ -64,7 +63,6 @@
                 $.post("ajaxController.php", {
                     uname:username
                 }, function(result) {
-                    console.log(result) 
                     if(result == "0") {
                         $.ajax({
                             url:"ajaxController.php",
@@ -74,18 +72,18 @@
                                 datas:data_array,
                             },
                             success:function(result) {
-                                console.log(result)
-                                //location.href="userInfoForms.php";
+                                location.href = "userInfoForms.php"
                             }
                         })
-                    }else if(result != 0){
+                        
+                    }else if(result != 0)
+                    {   
                         unameForm.style.borderBottom = "4px solid #ED2939"
                         validateTag.style.display = "block";
                         emailForm.style.marginTop = "0.5rem"
                     }
                 })
             }
-
         });
     });
 </script>

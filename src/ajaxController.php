@@ -23,6 +23,23 @@ if(isset($_POST['datas'])) {
   $_SESSION['userID'] = $_POST['datas'];
   echo $_SESSION['userID'];
 }
+
+//Getting UserID
+if(isset($_POST['getUserId'])) {
+  session_start();
+  echo $_SESSION['userID'];
+}
+
+//Getting UserData
+if(isset($_POST['getUserData'])) {
+  session_start();
+  $userID = $_SESSION['userID'];
+  $db->fetchData('users', 'usersInfo', 'users.userID', 'usersInfo.userID');
+  echo json_encode($db->res);
+}
+
+
+
 //Logged In
 if(isset($_POST['isLoggedin'])) {
   session_start();
@@ -33,6 +50,13 @@ if(isset($_POST['isLoggedin'])) {
     echo "0";
   }
 
+}
+
+//Retrieve User ID
+if(isset($_POST['getUserID'])) {
+  $dataUname = $_POST['uname'];
+  $db->fetchUserID($dataUname);
+  echo json_encode($db->res);                         
 }
 
 
@@ -67,18 +91,20 @@ if(isset($_POST['addUser'])) {
     'uname'=> $postData['uname'], 'pword' => $md5Pass, 'email' => $postData['email'],
   );
   $result = $db->insert('users', $dataArray);
-  echo json_encode($result);
-
+  $_SESSION['uname'] = $postData['uname'];
+  echo json_encode($_SESSION['uname']);
 }
 
 
 //Add User Info
 if (isset($_POST['addUserInfo'])) {
+  $userName = $_SESSION['uname'];
+  $db->fetchUserID($userName);
+  echo json_encode($db->res);
   $postData = $_POST['datas'];
-
   if (empty($postData['lname']) || empty($postData['fname']) || empty($postData['mname']) || empty($postData['bday']) || empty($postData['address']) || empty($postData['cnum'])) {
     echo json_encode(array('error' => 'Please fill in all fields.'));
-
+    
   } else {
     $data = array(
       'firstName' => $postData['fname'],
@@ -91,7 +117,6 @@ if (isset($_POST['addUserInfo'])) {
     );
 
     $db->insert('usersinfo', $data);
-    echo json_encode($db->res);
   }
 }
 

@@ -63,10 +63,6 @@ session_start();
                         <h1 class="text-lg font-bold">Birthday</h1>
                             <input type="date" id="bday" name="bday" class="border-2 border-black rounded-xl text-lg px-2 h-12 w-72">
                         </span>
-                        <span>
-                            <h1 class="text-lg font-bold">Religion</h1>
-                            <input type="text" id="religion" name="religion" placeholder="Religion" class="border-2 border-black rounded-xl text-lg px-2 h-12 w-72">
-                        </span>
                         
                         <!-- Radio Buttons Layer --> 
                         <span>
@@ -109,7 +105,6 @@ session_start();
     $(document).ready(function() {
         $("#addUserInfo").on("submit", function(e) {
             e.preventDefault();
-
             var datas = $(this).serializeArray();
             var data_array = {};
             var hasEmptyFields = false;
@@ -124,6 +119,7 @@ session_start();
             if (hasEmptyFields) {
                 alert('Please fill in all fields.');
             } else {
+                
                 $.ajax({
                     url: "ajaxController.php",
                     method: "POST",
@@ -133,7 +129,6 @@ session_start();
                     },
                     success: function(result) {
                         console.log(result);
-                        location.href = "index.php";
                     },
                     error: function(error) {
                         console.log(error);

@@ -86,6 +86,26 @@ class DB
     }
   }
 
+  public function fetchData($table1, $table2, $where1, $where2) {
+    $sql = "SELECT * FROM ($table1) INNER JOIN ($table2) WHERE '$where1' = '$where2'";
+    $result = $this->mysql->query($sql);
+    if($result->num_rows > 0) {
+      $this->fetchSelect($result);
+    }else {
+      $this->res = 0;
+    }
+  }
+
+  public function fetchUserID ($uname){
+    $sql = "SELECT * FROM users WHERE uname = '$uname'";
+    $result = $this->mysql->query($sql);
+    if($result->num_rows > 0) {
+      $this->fetchSelect($result);
+    }else {
+      $this->res = 0;
+    }
+  }
+
 
   public function __destruct()
   {
