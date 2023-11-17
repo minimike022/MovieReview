@@ -121,6 +121,12 @@ if (isset($_POST['addUserInfo'])) {
 }
 
 //Display Movies
+
+if(isset($_POST['fetchMovieData'])){
+  $db->select("movies");
+  echo json_encode($db->res);
+}
+
 if(isset($_POST['displayMovies'])) {
     $db->fetchMovies("movieGenre","Action");
     echo json_encode($db->res);

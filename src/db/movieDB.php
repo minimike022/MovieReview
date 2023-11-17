@@ -106,7 +106,6 @@ class DB
     }
   }
 
-
   public function __destruct()
   {
     if ($this->mysql) {
