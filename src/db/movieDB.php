@@ -23,9 +23,9 @@ class DB
     }
   }
 
-  public function select($table, $where = null)
+  public function select($table,$row = "*", $where = null)
   {
-    $sql = "SELECT * FROM $table" . ($where == null ? '' : "WHERE $where");
+    $sql = "SELECT $row FROM $table" . ($where == null ? '' : " WHERE $where");
     $result = $this->mysql->query($sql);
     $this->fetchSelect($result);
   }
@@ -78,8 +78,8 @@ class DB
     
   }
 
-  public function fetchMovies($category,$genre) {
-    $sql = "SELECT * FROM movies WHERE ($category) = '$genre'";
+  public function fetchMovies($movieID) {
+    $sql = "SELECT * FROM movies WHERE movieID = '$movieID'";
     $result = $this->mysql->query($sql);
     if($result->num_rows > 0) {
       $this->fetchSelect($result);
@@ -104,6 +104,11 @@ class DB
     }else {
       $this->res = 0;
     }
+  }
+
+  public function Delete($uid) {
+    $sql = "DELETE FROM movies WHERE movieID = '$uid'";
+    $this->res = $this->mysql->query($sql);
   }
 
   public function __destruct()

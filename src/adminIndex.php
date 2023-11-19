@@ -26,8 +26,8 @@
     </div>
     <!-- Movies -->
     <div>
-        <table>
-            <tr id="movies" class="flex flex-row">
+        <table class="flex justify-center">
+            <tr id="movies" class="flex flex-wrap w-[70em]">
             </tr>
         </table>
     </div>
@@ -46,19 +46,59 @@
         </form>
     </div>
 
+    <!-- Update Movie -->
+    <div id="updateMovies" class="h-[30em] w-[25em] absolute bg-black top-[5em] left-[30em] bg-opacity-95">
+    <button class="absolute top-6 right-16"><img src="images/x.svg" alt="" class="h-[30px] w-[30px]"></button>
+        <form action="" method="POST" id="getMovies" class="flex flex-col items-center">
+            <input type="text" id="movTitle" name="movTitle" placeholder="Movie Title" class="w-[18em] h-[3em] border-2 bg-[#3D3C3A] border-white rounded-md mt-16 pl-4 text-white">
+            <input type="text" id="movGenre" name="movGenre" placeholder="Movie Genre" class="w-[18em] h-[3em] border-2 bg-[#3D3C3A] border-white rounded-md mt-4 pl-4 text-white">
+            <input type="text" id="movRelease" name="movRelease" placeholder="Release Date" class="w-[18em] h-[3em] border-2 bg-[#3D3C3A] border-white rounded-md mt-4 pl-4 text-white">
+            <input type="text" id="movDesc" name="movDesc" placeholder="Movie Description" class="text-sm w-[20em] h-[5em] border-2 bg-[#3D3C3A] border-white rounded-md mt-4 pl-4 text-white">
+            <input type="file" id="img" name="img" accept="image/*" class="mt-4">    
+            <input type="submit" value="submit" name="submit" onclick="closeModal()" class="mt-4 w-[15em] h-[2em] bg-green-500 text-white text-lg font-bold rounded-lg text-center">
+        </form>
+    </div>
+
     <!-- Fetch Movies -->
     
 </body>
 <script type="text/javascript">
-    var addMovie = document.getElementById("addMovies");
-    addMovie.style.display = "none";
+    var addMovies = document.getElementById('addMovies');
+    var updateMovies =document.getElementById('updateMovies');
+    addMovies.style.display = "none"
+    updateMovies.style.display = "none"
 
-    const openModal = () => {
-        addMovie.style.display = "block";
+
+
+    function openModal() {
+        addMovies.style.display = "block"
     }
     const closeModal = () => {
         addMovie.style.display = "none"
     }
+
+    const loadMovies = () => {
+        $.ajax({
+        url:"ajaxController.php",
+        method:"POST",
+        data: {"fetchMovies":true},
+        success:function(result) {
+            var datas = JSON.parse(result);
+            var movieTr = ` `
+            console.log(datas)
+            datas.forEach(function(data){
+                movieTr += `<td class='flex items-center flex-col ml-10'><button id="button" data-Ids=`+data['movieID']+` class='bg-white h-52 w-44'></button>`
+                movieTr += `<h1>`+data['movieTitle']+`</h1>`
+                movieTr += `<div class='flex justify-between w-[6em] mt-4'><button id="update" data-ids="`+data['movieID']+`">edit</button>`
+                movieTr += `<button id="delete" data-ids="`+data['movieID']+`">delete</button></div></td>`
+            })
+            $('#movies').html(movieTr);
+        }
+        
+    })
+
+    }
+    loadMovies();
     $(document).ready(function() {
     $('#getMovies').on("submit", function(e) {
         var datas = $(this).serializeArray();
@@ -80,8 +120,7 @@
                
             },
             success:function(result){
-                console.log(result);
-                console.log("Added Successfully!");
+                loadMovies();
             },
             error:function(result) {
                 console.log("Added Failed!");
@@ -89,21 +128,40 @@
         })
     }) 
 
-    $.ajax({
-        url:"ajaxController.php",
-        method:"POST",
-        data: {"fetchMovieData":true},
-        success:function(result) {
-            var datas = JSON.parse(result);
-            var movieTr = ` `
-            datas.forEach(function(data){
-                movieTr += `<td class='flex items-center flex-col ml-10'><button id="button" data-Ids=`+data['movieID']+` class='bg-white h-52 w-44'></button>`
-                movieTr += `<h1>`+data['movieTitle']+`</h1></td>`
-            })
-            $('#movies').html(movieTr);
-        }
     })
+    //Update Movie
+    $(document).on("click", "#update", function(e) {
+        e.preventDefault();
+        var dataID = $(this).attr('data-ids');
+        $.ajax({
+            url:"ajaxController.php",
+            method:"POST",
+            data:{
+                "fetchMovieData":true,
+                dataId:dataID,
+            },
+            success:function(result) {
+                console.log(result)
+            }
 
+        })
+        
+    })
+    //Delete Movie
+    $(document).on("click", "#delete", function(e) {
+        e.preventDefault();
+        var dataID = $(this).attr('data-ids');
+        $.ajax({
+            url:"ajaxController.php",
+            method:"POST",
+            data: {
+                "isDeleted":true,
+                movieID:dataID,
+            },
+            success:function(result) {
+                loadMovies()
+            }
+        })
     })
 
 </script>

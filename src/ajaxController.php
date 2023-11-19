@@ -122,13 +122,13 @@ if (isset($_POST['addUserInfo'])) {
 
 //Display Movies
 
-if(isset($_POST['fetchMovieData'])){
-  $db->select("movies");
+if(isset($_POST['fetchMovies'])){
+  $db->select("movies", "*");
   echo json_encode($db->res);
 }
 
 if(isset($_POST['displayMovies'])) {
-    $db->fetchMovies("movieGenre","Action");
+    $db->select("movies");
     echo json_encode($db->res);
 }
 
@@ -146,7 +146,21 @@ if(isset($_POST['getMovieID'])) {
 
 if(isset($_POST['getMovieData'])) {
   $movieID = $_POST['movieId'];
-  $db->fetchMovies('movieID',$movieID);
+  $db->select("movies", "*", "movieID = $movieID");
   echo json_encode($db->res);
 }
+
+if(isset($_POST['isDeleted'])) {
+  $movieID = $_POST['movieID'];
+  $db->Delete($movieID);
+  echo json_encode($db->res);
+}
+
+//Admin
+if(isset($_POST['fetchMovieData'])) {
+  $movieID = $_POST['dataId'];
+  $db->select("movies", "*","movieID = $movieID");
+  echo json_encode($db->res);
+}
+
 

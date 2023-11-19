@@ -133,8 +133,8 @@
                         movieId:movieID,
                     },
                     success:function(result) {
-                        var movieData = JSON.parse(result);
-                        console.log(movieData)
+                        var movieData = JSON.parse(result)
+                        console.log(result)
                         movieData.forEach(function(data) {
                             document.getElementById("movieTitle").textContent = data['movieTitle'];
                             document.getElementById("movieGenre").textContent +=" " + data['movieGenre'];

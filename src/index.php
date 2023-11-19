@@ -87,62 +87,11 @@ session_start();
         </div>
     </div>
     <!-- Body -->
-    <div class="text-white my-10 ml-6">
-        <!-- Top Trending Tables -->
-        <div>
-            <h1 class="text-2xl font-bold">Top Trending</h1>
-            <table id="topTrendingTables" class="my-4">
-                <tr class="flex flex-row">
-                    <td class="flex items-center flex-col ml-10"><div class="bg-white h-52 w-44"></div>
-                    <h1>Hello World</h1></td>
-                    <td class="flex items-center flex-col ml-10"><div class="bg-white h-52 w-44"></div>
-                    <h1>Hello World</h1></td>
-                    <td class="flex items-center flex-col ml-10"><div class="bg-white h-52 w-44"></div>
-                    <h1>Hello World</h1></td>
-                </tr>
-            </table>
-        </div>
-        <!-- Horror Tables -->
-        <div>
-            <h1 class="text-2xl font-bold">Horror/Thriller</h1>
-            <table id="horrorTables"  class="my-4">
-                <tr class="flex flex-row">
-                    <td class="flex items-center flex-col ml-10"><div class="bg-white h-52 w-44"></div>
-                        <h1>Hello World</h1></td>
-                    <td class="flex items-center flex-col ml-10"><div class="bg-white h-52 w-44"></div>
-                        <h1>Hello World</h1></td>
-                    <td class="flex items-center flex-col ml-10"><div class="bg-white h-52 w-44"></div>
-                        <h1>Hello World</h1></td>
-                </tr>
-            </table>
-    
-        </div>
-
-        <!-- Action Tables -->
-        <div>
-            <h1 class="text-2xl font-bold">Action</h1>
-            <table id="actionTables" class="my-4 w-full">
-                <tr class="flex flex-row overflow-x-scroll" id="actMovies">
-                </tr>
-            </table>
-    
-        </div>
-
-        <!-- comedy Tables -->
-        <div>
-            <h1 class="text-2xl font-bold">Comedy</h1>
-            <table id="comedyTables"  class="my-4">
-                <tr class="flex flex-row">
-                    <td class="flex items-center flex-col ml-10"><div class="bg-white h-52 w-44"></div>
-                        <h1>Hello World</h1></td>
-                    <td class="flex items-center flex-col ml-10"><div class="bg-white h-52 w-44"></div>
-                        <h1>Hello World</h1></td>
-                    <td class="flex items-center flex-col ml-10"><div class="bg-white h-52 w-44"></div>
-                        <h1>Hello World</h1></td>
-                </tr>
-            </table>
-    
-        </div>
+    <div class="text-white my-10 flex items-center justify-center">
+        <!-- Movie Tables -->
+        <table class="flex-wrap flex justify-center">
+            <tr id="movies" class="flex w-[70em] flex-wrap"></tr>
+        </table>
     </div>
 </body>
 <script script="text/javascript">
@@ -162,10 +111,10 @@ session_start();
                 var datas = JSON.parse(result);
                 var movieTr = ` `
                 datas.forEach(function(data){
-                    movieTr += `<td class='flex items-center flex-col ml-10'><button id="button" data-Ids=`+data['movieID']+` class='bg-white h-52 w-44'></button>`
+                    movieTr += `<td class='flex items-center flex-col ml-10' id="button" data-Ids=`+data['movieID']+`><button class='bg-white h-52 w-44'></button>`
                     movieTr += `<h1>`+data['movieTitle']+`</h1></td>`
                 })
-                $("#actMovies").html(movieTr);
+                $("#movies").html(movieTr);
             }
         })
     }
@@ -174,6 +123,7 @@ session_start();
         
     $(document).on("click", "#button", function(e) {
         var dataID = $(this).attr('data-Ids');
+        console.log(dataID)
         $.ajax({
             url: "ajaxController.php",
             method:"POST",
