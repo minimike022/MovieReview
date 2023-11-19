@@ -163,4 +163,21 @@ if(isset($_POST['fetchMovieData'])) {
   echo json_encode($db->res);
 }
 
+if(isset($_POST['isGettingUpdate'])) {
+  $dataID = $_POST['dataId'];
+  $db->select("movies", "*", "movieID = $dataID");
+  echo json_encode($db->res);
+}
+
+if(isset($_POST['isUpdated'])) {
+  $movieID = $_POST['movieID'];
+  $db->Update("movies", $movieID, $_POST['movTitle'], $_POST['movDesc'], $_POST['movDate'], $_POST['movGenre']);
+  echo json_encode($db->res);
+}
+
+if(isset($_POST['live_Search'])) {
+  $liveSearch = $_POST['live_Search'];
+  $db->select("movies", "*", "movieTitle LIKE '%".$liveSearch."%'");
+  echo json_encode($db->res);
+}
 

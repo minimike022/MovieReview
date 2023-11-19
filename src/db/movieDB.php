@@ -111,6 +111,11 @@ class DB
     $this->res = $this->mysql->query($sql);
   }
 
+  public function Update($table, $uid, $movieTitle, $movieDesc, $movieGenre, $movieDate) {
+    $sql = "UPDATE $table SET movieTitle = '$movieTitle', movieDescription = '$movieDesc', movieDate = '$movieDate', movieGenre = '$movieGenre' WHERE movieID = '$uid'";
+    $this->res = $this->mysql->query($sql);
+  }
+
   public function __destruct()
   {
     if ($this->mysql) {
