@@ -28,7 +28,7 @@
                 <div class="flex items-center justify-center">
                     <a href="landing.php"><img src="images/logo1.png" alt="" class="h-[60px] w-[80px]"></a>
                 <!-- Navigation -->
-                    <div class="flex items-center justify-between h-full font-body w-[28em] ml-8 font-bold text-base">
+                    <div class="flex items-center justify-between h-full font-body w-[20em] ml-8 font-bold text-base">
                         <a href="index.php" class="hover:text-red-500 hover:text-xl">Home</a>
                         <a href="" class="hover:text-red-500 hover:text-xl">Movies</a>
                         <a href=""class="hover:text-red-500 hover:text-xl">New & Popular</a>
@@ -52,27 +52,24 @@
     <!-- Movie Description -->
     <div class="m-14 flex flex-row w-[40em]">
         <!-- Movie Poster -->
-        <span>
-            <img src="" alt="" class="h-80 w-72" id="moviePoster">
-        </span>
+            <img src="" alt="sdwa" class="h-[25em] w-[20em]" id="moviePoster">
         <!-- Movie Description -->
         <div class="mx-12 my-4">
             <!-- Movie Title -->
             <span>
-                <h1 id="movieTitle" class="text-[2.5em] text-white font-bold">Movie Title</h1>
+                <h1 id="movieTitle" class="text-[3.5em] text-white font-bold">Movie Title</h1>
             </span>
             <!-- Movie Genre -->
             <span class=>
-                <h1 class="text-[1em] text-white font-semibold mt-2" id="movieGenre">Genre:</h1>
+                <h1 class="text-[1.3em] text-white font-semibold mt-2" id="movieGenre">Genre:</h1>
             </span>
             <!-- Movie Release Date -->
             <span class=>
-                <h1 class="text-[1em] text-white font-semibold mt-2" id="movieRelease">Release Date:</h1>
+                <h1 class="text-[1.3em] text-white font-semibold mt-2" id="movieRelease">Release Date:</h1>
             </span>
             <!-- Movie Description -->
             <span>
-                <p class="text-white w-[40em] break-all mt-4" id="movieDesc">
-                    dsadjsahfdslhdkalsdjsaklhwdiaofhsladjwladjsakldjwaidjspaodjwaldhsajkdaasl;adkwal;dsahjfkshjkes
+                <p class="text-white w-[40em] break-all text-[1em] mt-9" id="movieDesc">
                 </p>    
             </span>
         </div>
@@ -97,24 +94,9 @@
         </form>
     </div>
 
-    <!-- Suggested Movie Section -->
-    <div class="text-white m-14">
-        <h1 class="text-2xl font-bold">Similar Movies</h1>
-        <table id="similarMovies" class="my-4">
-            <tr class="flex flex-row">
-                <td class="flex items-center flex-col ml-10"><div class="bg-white h-52 w-44"></div>
-                    <h1 class="text-base font-bold mt-2">Hello World</h1></td>
-                <td class="flex items-center flex-col ml-10"><div class="bg-white h-52 w-44"></div>
-                    <h1 class="text-base font-bold mt-2">Hello World</h1></td>
-                <td class="flex items-center flex-col ml-10"><div class="bg-white h-52 w-44"></div>
-                    <h1 class="text-base font-bold mt-2">Hello World</h1></td>
-            </tr>
-        </table>
-    </div>
 </body>
 <script type="text/javascript">
     
-
     $(document).ready(function() {
         $.ajax({
             url: "ajaxController.php",
@@ -134,8 +116,9 @@
                     },
                     success:function(result) {
                         var movieData = JSON.parse(result)
-                        console.log(result)
+                        console.log(movieData)
                         movieData.forEach(function(data) {
+                            document.getElementById("moviePoster").src = data['moviePhoto']
                             document.getElementById("movieTitle").textContent = data['movieTitle'];
                             document.getElementById("movieGenre").textContent +=" " + data['movieGenre'];
                             document.getElementById("movieRelease").textContent +=" " + data['movieDate'];
