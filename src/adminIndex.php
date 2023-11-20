@@ -27,7 +27,7 @@
     <!-- Movies -->
     <div>
         <table class="flex justify-center">
-            <tr id="movies" class="flex flex-wrap w-[70em]">
+            <tr id="movies" class="flex flex-wrap w-[70em] mt-5 text-white">
             </tr>
         </table>
     </div>
@@ -36,12 +36,12 @@
     
     <div id="addMovies" class="h-[30em] w-[25em] absolute bg-black top-[5em] left-[30em] bg-opacity-95">
     <button onclick="closeModal(addMovies)" class="absolute top-6 right-16"><img src="images/x.svg" alt="" class="h-[30px] w-[30px]"></button>
-        <form action="" method="POST" id="getMovies" class="flex flex-col items-center">
+        <form action="" method="POST" id="getMovies" class="flex flex-col items-center" enctype="multipart/form-data">
             <input type="text"  name="movTitle" placeholder="Movie Title" class="w-[18em] h-[3em] border-2 bg-[#3D3C3A] border-white rounded-md mt-16 pl-4 text-white">
             <input type="text"  name="movGenre" placeholder="Movie Genre" class="w-[18em] h-[3em] border-2 bg-[#3D3C3A] border-white rounded-md mt-4 pl-4 text-white">
             <input type="text"  name="movRelease" placeholder="Release Date" class="w-[18em] h-[3em] border-2 bg-[#3D3C3A] border-white rounded-md mt-4 pl-4 text-white">
             <input type="text"  name="movDesc" placeholder="Movie Description" class="text-sm w-[20em] h-[5em] border-2 bg-[#3D3C3A] border-white rounded-md mt-4 pl-4 text-white">
-            <input type="file" id="img" name="img" accept="image/*" class="mt-4">    
+            <input type="file" id="movImg" name="img" accept="image/*" class="mt-4">    
             <input type="submit" value="submit" name="submit" onclick="closeModal()" class="mt-4 w-[15em] h-[2em] bg-green-500 text-white text-lg font-bold rounded-lg text-center">
         </form>
     </div>
@@ -54,7 +54,7 @@
             <input type="text" id="movGenre" name="movGenre" placeholder="Movie Genre" class="w-[18em] h-[3em] border-2 bg-[#3D3C3A] border-white rounded-md mt-4 pl-4 text-white">
             <input type="text" id="movRelease" name="movRelease" placeholder="Release Date" class="w-[18em] h-[3em] border-2 bg-[#3D3C3A] border-white rounded-md mt-4 pl-4 text-white">
             <input type="text" id="movDesc" name="movDesc" placeholder="Movie Description" class="text-sm w-[20em] h-[5em] border-2 bg-[#3D3C3A] border-white rounded-md mt-4 pl-4 text-white">
-            <input type="file" id="img" name="img" accept="image/*" class="mt-4">    
+            <input type="file" id="upmovImg" name="img" accept="image/*" class="mt-4">    
             <input type="submit" value="update" name="submit" onclick="closeModal(updateMovies)" class="mt-4 w-[15em] h-[2em] bg-green-500 text-white text-lg font-bold rounded-lg text-center">
         </form>
     </div>
@@ -63,6 +63,7 @@
     
 </body>
 <script type="text/javascript">
+    
     var addMovies = document.getElementById('addMovies');
     var updateMovies =document.getElementById('updateMovies');
     addMovies.style.display = "none"
@@ -87,10 +88,11 @@
             var movieTr = ` `
             console.log(datas)
             datas.forEach(function(data){
-                movieTr += `<td class='flex items-center flex-col ml-10'><button id="button" data-Ids=`+data['movieID']+` class='bg-white h-52 w-44'></button>`
-                movieTr += `<h1>`+data['movieTitle']+`</h1>`
-                movieTr += `<div class='flex justify-between w-[6em] mt-4'><button id="update" onclick="openModal(updateMovies)" data-ids="`+data['movieID']+`">edit</button>`
-                movieTr += `<button id="delete" data-ids="`+data['movieID']+`">delete</button></div></td>`
+                movieTr += `<td class='h-[28em] w-[20em] py-4 bg-black rounded-lg flex items-center justify-center flex-col ml-10 mt-10'><img src="`+data['moviePhoto']+`" data-Ids=`+data['movieID']+` class='h-[18em] w-[18em]'></button>`
+                movieTr += `<h1 class="mt-4 font-bold text-2xl">`+data['movieTitle']+`</h1>`
+                movieTr += `<h1 class="mt-4 text-base">`+data['movieGenre']+` | `+data['movieDate']+`</h1>`
+                movieTr += `<div class='flex justify-between w-[12em] h-[3em] mt-4'><button class="bg-[#007FFF] rounded-lg h-[2em] w-[5em]" id="update" onclick="openModal(updateMovies)" data-ids="`+data['movieID']+`">Update</button>`
+                movieTr += `<button class="bg-[#FF2400] rounded-lg h-[2em] w-[5em]" id="delete" data-ids="`+data['movieID']+`">DELETE</button></div></td>`
             })
             $('#movies').html(movieTr);
         }
@@ -116,10 +118,11 @@
                         var movieTr = ` `
                         console.log(datas)
                         datas.forEach(function(data){
-                            movieTr += `<td class='flex items-center flex-col ml-10'><button id="button" data-Ids=`+data['movieID']+` class='bg-white h-52 w-44'></button>`
-                            movieTr += `<h1>`+data['movieTitle']+`</h1>`
-                            movieTr += `<div class='flex justify-between w-[6em] mt-4'><button id="update" onclick="openModal(updateMovies)" data-ids="`+data['movieID']+`">edit</button>`
-                            movieTr += `<button id="delete" data-ids="`+data['movieID']+`">delete</button></div></td>`
+                            movieTr += `<td class='h-[28em] w-[20em] py-4 bg-black rounded-lg flex items-center justify-center flex-col ml-10 mt-10'><img src="`+data['moviePhoto']+`" data-Ids=`+data['movieID']+` class='h-[18em] w-[18em]'></button>`
+                            movieTr += `<h1 class="mt-4 font-bold text-2xl">`+data['movieTitle']+`</h1>`
+                            movieTr += `<h1 class="mt-4 text-base">`+data['movieGenre']+` | `+data['movieDate']+`</h1>`
+                            movieTr += `<div class='flex justify-between w-[12em] h-[3em] mt-4'><button class="bg-[#007FFF] rounded-lg h-[2em] w-[5em]" id="update" onclick="openModal(updateMovies)" data-ids="`+data['movieID']+`">Update</button>`
+                            movieTr += `<button class="bg-[#FF2400] rounded-lg h-[2em] w-[5em]" id="delete" data-ids="`+data['movieID']+`">DELETE</button></div></td>`
                         })
                         $('#movies').html(movieTr);
                      }
@@ -134,8 +137,10 @@
     
     $(document).ready(function() {
     $('#getMovies').on("submit", function(e) {
+        e.preventDefault();
         var datas = $(this).serializeArray();
-        console.log(datas)
+        var image = $('#movImg').val();
+        console.log(image)
         var data_array = {};
         $.map(datas, function(data, index) {
                 if (data['value'].trim() === '') {
@@ -149,11 +154,12 @@
             method: "POST",
             data: {
                 "AddMovie": true,
-                movieData:data_array
-               
+                movieData:data_array,
+                imagePhoto: image,
             },
             success:function(result){
                 loadMovies();
+                closeModal(addMovies);
             },
             error:function(result) {
                 console.log("Added Failed!");
@@ -187,6 +193,8 @@
 
         $('#updateMovies').on("submit", function(e) {
             e.preventDefault();
+            var image = $('#upmovImg').val();
+            console.log(image);
             var movTitle = $('#movTitle').val();
             var movGenre = $('#movGenre').val();
             var movDate = $('#movRelease').val();
@@ -202,6 +210,7 @@
                     movDate:movDate,
                     movDesc:movDesc,
                     movieID:dataID,
+                    imagePhoto:image,
                 },
                 success:function(result) {
                     loadMovies();

@@ -31,7 +31,7 @@ session_start();
                 <a href="" class="hover:text-red-500 hover:text-xl">New & Popular</a>
             </div>
             <form method="POST" action="" class="ml-4 flex items-center border-none">
-                <input type="text" placeholder="Search:" name="search" id="search" class="rounded-lg h-10 w-[20em] border-2 border-white bg-black focus:outline-none focus:border-red-500 pl-6">
+                <input type="text" placeholder="Search:" id="live_Search" name="search" id="search" class="rounded-lg h-10 w-[20em] border-2 border-white bg-black focus:outline-none focus:border-red-500 pl-6">
             </form>
         </div>
         
@@ -62,7 +62,7 @@ session_start();
     <!-- Featured -->
     <div class="w-full h-[32em] bg-landingImage bg-cover font-body text-white overflow-hidden">
         <!-- Featured Description -->
-        <div class="relative translate-x-12 translate-y-52">
+        <div class="relative translate-x-12 translate-y-64">
             <!-- Movie Title -->
             <h1 class="text-3xl font-extrabold">John Wick(2014)</h1>
             <!-- Movie Description -->
@@ -81,19 +81,19 @@ session_start();
                     <h1>4.5/5</h1>
                 </div>
             </div>
-            <button onclick="moveToMovie()" class=" mt-2 border-2 rounded-lg border-white w-[6.5em] h-[2.5em] hover:bg-red-500 hover:border-none active:bg-red-600">
-                <h1>See more</h1>
-            </button>
         </div>
     </div>
     <!-- Body -->
-    <div class="text-white my-10 flex items-center justify-center">
+    <div class="my-10 flex items-center justify-center">
         <!-- Movie Tables -->
         <table class="flex-wrap flex justify-center">
-            <tr id="movies" class="flex w-[70em] flex-wrap"></tr>
+            <tr id="movies" class="flex w-[70em] flex-wrap">
+
+            </tr>
         </table>
     </div>
 </body>
+
 <script script="text/javascript">
     var loggedIn = document.getElementById("loggedIn");
     var notLoggedIn = document.getElementById("notloggedIn");
@@ -102,25 +102,27 @@ session_start();
         location.href = "landingMovie.php";
     }
 
-    const loadMovie = () => {
+    const loadMovies = () => {
         $.ajax({
-            url:"ajaxController.php",
-            method: "POST",
-            data: {"displayMovies": true},
-            success:function(result) {
-                var datas = JSON.parse(result);
-                var movieTr = ` `
-                datas.forEach(function(data){
-                    movieTr += `<td class='flex items-center flex-col ml-10' id="button" data-Ids=`+data['movieID']+`><button class='bg-white h-52 w-44'></button>`
-                    movieTr += `<h1>`+data['movieTitle']+`</h1></td>`
-                })
-                $("#movies").html(movieTr);
-            }
+        url:"ajaxController.php",
+        method:"POST",
+        data: {"fetchMovies":true},
+        success:function(result) {
+            var datas = JSON.parse(result);
+            var movieTr = ` `
+            console.log(datas)
+            datas.forEach(function(data){
+                movieTr += `<td class='h-[26em] w-[20em] py-4 bg-white rounded-lg flex items-center flex-col ml-10 mt-10'><button id="button" data-ids=`+data['movieID']+`><img src="`+data['moviePhoto']+`" data-Ids=`+data['movieID']+` class='h-[18em] w-[18em] rounded-lg'></button>`
+                movieTr += `<h1 class="mt-4 font-bold text-2xl">`+data['movieTitle']+`</h1>`
+                movieTr += `<h1 class="mt-4 text-xl">`+data['movieGenre']+` | `+data['movieDate']+`</h1>`
+            })
+            $('#movies').html(movieTr);
+        }
+        
         })
     }
    $(document).ready(function() {
-        loadMovie();
-        
+        loadMovies();
     $(document).on("click", "#button", function(e) {
         var dataID = $(this).attr('data-Ids');
         console.log(dataID)
@@ -129,9 +131,10 @@ session_start();
             method:"POST",
             data:{
                 "deliveringData":true,
-                dataId:dataID},
-            success:function()  {
-                console.log("Success");
+                dataId:dataID
+            },
+            success:function(result)  {
+                console.log(result);
                 location.href = "landingMovie.php"
             }
         }) 
@@ -155,6 +158,33 @@ session_start();
         }
     })
    })
+
+   $('#live_Search').keyup(function(e) {
+            e.preventDefault()
+            var liveSearch = $(this).val();
+            if(liveSearch != '') {
+                $.ajax({
+                    url:"ajaxController.php",
+                    method:"POST",
+                    data: {
+                        live_Search:liveSearch
+                    },
+                    success:function(result) {
+                        var datas = JSON.parse(result);
+                        var movieTr = ` `
+                        console.log(datas)
+                        datas.forEach(function(data){
+                            movieTr += `<td class='h-[28em] w-[20em] py-4 bg-white rounded-lg flex items-center flex-col ml-10 mt-10'><button id="button" data-ids=`+data['movieID']+`><img src="`+data['moviePhoto']+`" data-Ids=`+data['movieID']+` class='h-[18em] w-[18em] rounded-lg'></button>`
+                            movieTr += `<h1 class="mt-4 font-bold text-2xl">`+data['movieTitle']+`</h1>`
+                            movieTr += `<h1 class="mt-4 text-base">`+data['movieGenre']+` | `+data['movieDate']+`</h1>`
+                        })
+                        $('#movies').html(movieTr);
+                     }
+                })
+            } else{
+                loadMovies()
+            }
+        })
    
 
 </script>

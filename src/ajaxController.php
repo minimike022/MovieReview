@@ -70,16 +70,6 @@ if (isset($_POST['uname'])) {
   }
 }
 
-//Adding Movie Into Admin Websit
-if(isset($_POST['AddMovie'])) {
-  $postData = $_POST['movieData'];
-  $dataArray = array(
-    'movieTitle'=> $postData['movTitle'], 'movieDescription' => $postData['movDesc'], 'movieGenre' => $postData['movGenre'], 'movieDate' => $postData['movRelease']
-  );
-  $result = $db->insert('movies', $dataArray);
-  echo json_encode($result);
-
-}
 
 
 //Add User Login Info
@@ -170,8 +160,11 @@ if(isset($_POST['isGettingUpdate'])) {
 }
 
 if(isset($_POST['isUpdated'])) {
+  $images = $_POST['imagePhoto'];
+  $fileName = basename($images);
+  $location = "images/".$fileName;
   $movieID = $_POST['movieID'];
-  $db->Update("movies", $movieID, $_POST['movTitle'], $_POST['movDesc'], $_POST['movDate'], $_POST['movGenre']);
+  $db->Update("movies", $movieID, $_POST['movTitle'], $_POST['movDesc'], $_POST['movDate'], $_POST['movGenre'], $location);
   echo json_encode($db->res);
 }
 
@@ -180,4 +173,21 @@ if(isset($_POST['live_Search'])) {
   $db->select("movies", "*", "movieTitle LIKE '%".$liveSearch."%'");
   echo json_encode($db->res);
 }
+
+//Adding Movie Into Admin Websit
+if(isset($_POST['AddMovie'])) {
+  $postData = $_POST['movieData'];
+  $images = $_POST['imagePhoto'];
+  $fileName = basename($images);
+  $location = "images/".$fileName;
+  $imageFileType = pathinfo($location,PATHINFO_EXTENSION);
+  $validExtension = array('jpg', 'jpeg', 'png');
+  $dataArray = array(
+    'movieTitle'=> $postData['movTitle'], 'movieDescription' => $postData['movDesc'], 'movieGenre' => $postData['movGenre'], 'movieDate' => $postData['movRelease'], 'moviePhoto' => $location
+  );
+  $result = $db->insert('movies', $dataArray);
+  echo json_encode($result);
+
+}
+
 

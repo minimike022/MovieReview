@@ -27,6 +27,7 @@ class DB
   {
     $sql = "SELECT $row FROM $table" . ($where == null ? '' : " WHERE $where");
     $result = $this->mysql->query($sql);
+
     $this->fetchSelect($result);
   }
 
@@ -111,9 +112,10 @@ class DB
     $this->res = $this->mysql->query($sql);
   }
 
-  public function Update($table, $uid, $movieTitle, $movieDesc, $movieGenre, $movieDate) {
-    $sql = "UPDATE $table SET movieTitle = '$movieTitle', movieDescription = '$movieDesc', movieDate = '$movieDate', movieGenre = '$movieGenre' WHERE movieID = '$uid'";
+  public function Update($table, $uid, $movieTitle, $movieDesc, $movieGenre, $movieDate, $moviePhoto) {
+    $sql = "UPDATE $table SET movieTitle = '$movieTitle', movieDescription = '$movieDesc', movieDate = '$movieDate', movieGenre = '$movieGenre', moviePhoto = '$moviePhoto' WHERE movieID = '$uid'";
     $this->res = $this->mysql->query($sql);
+    //$this->res = $sql;
   }
 
   public function __destruct()

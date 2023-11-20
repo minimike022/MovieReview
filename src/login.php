@@ -62,7 +62,10 @@
             if (hasEmptyFields) {
                 alert('Please fill in all fields');
                 } else {
-                $.ajax({
+                if(uname == "admin" && pword == "admin123") {
+                    location.href = "adminIndex.php"
+                }else {
+                    $.ajax({
                     url: "ajaxController.php",
                     method: "POST",
                     data: {
@@ -95,6 +98,7 @@
                     
 
                 })
+                }
             }
         });
     });
