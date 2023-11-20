@@ -17,6 +17,8 @@
         ?>
     </style>
     <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
 </head>
 <body class="font-body bg-black">
     <!-- Header Navigation -->
@@ -37,14 +39,26 @@
                         <input type="text" placeholder="Search:" name="search" id="search" class="rounded-lg h-10 w-[20em] border-2 border-white bg-black focus:outline-none focus:border-red-500 pl-6">
                     </form>
                 </div>
-            <!-- Sign Out Buttons -->
-                <div class="flex items-center justify-between w-[10em]">
-                    <div>
-                        <a href="">Profile</a>
+                <!-- Users Buttons -->
+                <div id="notloggedIn">
+                    <div class="flex items-center justify-between w-[13em]">
+                        <a href="signup.php" class="h-[2.5em] w-24 flex items-center justify-center border-2 border-white rounded-md hover:bg-red-500 hover:border-none active:bg-red-600">
+                            <h1 class="text-white font-bold">Register</h1>
+                        </a> 
+                        <a href="login.php" class="h-[2.5em] w-24 flex items-center justify-center bg-white rounded-md hover:bg-red-500 hover:border-none active:bg-red-600">
+                            <h1 class="text-black font-bold">Sign In</h1>
+                        </a>
                     </div>
-                    <a href="login.php" class="h-[2.5em] w-24 flex items-center justify-center border-2 border-white rounded-md hover:bg-red-500 hover:border-none active:bg-red-600">
-                        <h1>Sign Out</h1>
-                    </a>
+                </div>
+                <div id="loggedIn">
+                    <div class="flex items-center justify-between w-[13em]">
+                        <a href="userProfile.php" class="h-[2.5em] w-24 flex items-center justify-center rounded-md hover:bg-red-500 hover:border-none active:bg-red-600">
+                            <h1 class="text-white font-bold">Profile</h1>
+                        </a> 
+                        <a href="logout.php" class="h-[2.5em] w-24 flex items-center justify-center bg-white rounded-md hover:bg-red-500 hover:border-none active:bg-red-600 text-black hover:text-white">
+                            <h1 class="font-bold">Sign Out</h1>
+                        </a>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -96,6 +110,19 @@
 
 </body>
 <script type="text/javascript">
+    var loggedIn = document.getElementById("loggedIn");
+    var notLoggedIn = document.getElementById("notloggedIn");
+    $.ajax({
+        url:"ajaxController.php",
+        method: "POST",
+        data: {
+            "getUserId":true
+        },
+        success:function(result) {
+            var userID = result;
+            console.log(userID);
+        }
+    })
     
     $(document).ready(function() {
         $.ajax({

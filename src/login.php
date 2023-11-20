@@ -12,6 +12,8 @@
 
         ?>
     </style>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
     <script type="text/javascript" src="js/jquery.min.js"></script>
 </head>
 
@@ -36,7 +38,7 @@
             <h1>or login using</h1>
             <!-- Soc Med Photos -->
             <div class="mt-4 flex justify-between w-36">
-                <img src="images/google.png" alt="" class="h-[35px] w-[35   px]">
+                <button onclick="onSignIn()"><img src="images/google.png" alt="" class="h-[35px] w-[35px]"></button>
                 <img src="images/Facebook.png" alt="" class="h-[35px] w-[35px]">
                 <img src="images/twitter.png" alt="" class="h-[35px] w-[35px]">
             </div>
@@ -49,6 +51,22 @@
 </body>
 
 <script type="text/javascript">
+
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+}
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+
     var validation = document.getElementById('validation');
     validation.style.display = "none"
     $(document).ready(function() {
@@ -75,6 +93,7 @@
                     },
                     success: function(result) {
                         var datas = JSON.parse(result)
+                        console.log(datas);
                             if (datas == 0) {
                                 validation.style.display = "block";
                             } else {
@@ -84,7 +103,8 @@
                                     url: "ajaxController.php",
                                     method: "POST",
                                     data: {datas:dataID},
-                                    success:function(result) { 
+                                    success:function(result) {
+                                        console.log(result) 
                                         location.href = "index.php";
                                         }
                                     })

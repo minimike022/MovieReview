@@ -3,6 +3,12 @@ require "db/movieDB.php";
 
 $db = new DB();
 
+if(isset($_POST['loggedIn'])) {
+  session_start();
+  $data = $_SESSION['userID'];
+  echo json_encode($data);
+}
+
 if (isset($_POST['getStudents'])) {
   $db->select('users');
   echo json_encode($db->res);
@@ -25,10 +31,6 @@ if(isset($_POST['datas'])) {
 }
 
 //Getting UserID
-if(isset($_POST['getUserId'])) {
-  session_start();
-  echo $_SESSION['userID'];
-}
 
 //Getting UserData
 if(isset($_POST['getUserData'])) {

@@ -17,6 +17,8 @@ session_start();
         ?>
     </style>
     <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
 </head>
 <body class="font-body bg-black">
     <!-- Navigation Header -->
@@ -98,10 +100,6 @@ session_start();
     var loggedIn = document.getElementById("loggedIn");
     var notLoggedIn = document.getElementById("notloggedIn");
 
-    const moveToMovie = () => {
-        location.href = "landingMovie.php";
-    }
-
     const loadMovies = () => {
         $.ajax({
         url:"ajaxController.php",
@@ -121,6 +119,7 @@ session_start();
         
         })
     }
+    loadMovies();
    $(document).ready(function() {
         loadMovies();
     $(document).on("click", "#button", function(e) {
@@ -133,20 +132,21 @@ session_start();
                 "deliveringData":true,
                 dataId:dataID
             },
-            success:function(result)  {
-                console.log(result);
+            success:function(result)  { 
+                console.log(result)
                 location.href = "landingMovie.php"
             }
         }) 
     })
 
-         $.ajax({
+        $.ajax({
         url:"ajaxController.php",
         method: "POST",
         data: {
             "isLoggedin":true
         },
         success:function(result) {
+            console.log(result)
             if(result == 0) {
                 loggedIn.style.display = "none";
                 notLoggedIn.style.display = "block"

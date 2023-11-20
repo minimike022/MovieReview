@@ -87,33 +87,23 @@
 </body>
 <script type="text/javascript">
     $.ajax({
-        url: "ajaxController.php",
-        method: "POST",
+        url:"ajaxController.php",
+        method:"POST",
         data: {
-            "getUserInfo": true
-        },
-        success:function(result) {
-            var userID = result;
-            $.ajax({
-                url:"ajaxController.php",
-                method:"POST",
-                data: {
-                    "getUserId":true,
-                    userID:userID},
+            "getUserId":true,},
+            success:function(result) {
+                console.log(result)
+                $.ajax({
+                    url:"ajaxController.php",
+                    method:"POST",
+                    data: {
+                        "getUserData": true
+                    },
                     success:function(result) {
-                    console.log(result)
-                    $.ajax({
-                        url:"ajaxController.php",
-                        method:"POST",
-                        data: {
-                            "getUserData": true
-                        },
-                        success:function(result) {
-                        }
-                    })
-                }
-            })
-        }
-    })
+                        console.log(result)
+                    }
+                })
+            }
+        })
 </script>
 </html>
