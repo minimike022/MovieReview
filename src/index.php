@@ -146,7 +146,19 @@ session_start();
             "isLoggedin":true
         },
         success:function(result) {
-            console.log(result)
+            var userID =result
+            $.ajax({
+                url:"ajaxController.php",
+                method:"POST",
+                data: {
+                    "isDeliveringUserID": true,
+                    userID:userID,
+                },
+                success:function(result) {
+                    console.log(result)
+                }
+            })
+            
             if(result == 0) {
                 loggedIn.style.display = "none";
                 notLoggedIn.style.display = "block"

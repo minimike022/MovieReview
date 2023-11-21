@@ -34,7 +34,7 @@
 
         <!-- Users Buttons -->
         <div id="loggedIn">
-                <a href="login.php" class="h-[2.5em] w-24 flex items-center justify-center bg-white rounded-md hover:bg-red-500 hover:border-none active:bg-red-600 text-black hover:text-white">
+                <a href="logout.php" class="h-[2.5em] w-24 flex items-center justify-center bg-white rounded-md hover:bg-red-500 hover:border-none active:bg-red-600 text-black hover:text-white">
                     <h1 class="font-bold">Sign Out</h1>
                 </a>
         </div>
@@ -49,11 +49,11 @@
                 <img src="images/twitter.png" alt="" class="h-[15em] w-[15em]">
             </div>
             <div class="mt-4 items-start w-full font-bold text-lg">
-                <h1 class="mt-2">Name: </h1>
-                <h1 class="mt-2">Age: </h1>
-                <h1 class="mt-2">Gender: </h1>
-                <h1 class="mt-2">Religion: </h1>
-                <h1 class="mt-2">Birthday</h1>
+                <h1 class="mt-2" id="name">Name: </h1>
+                <h1 class="mt-2" id="gender">Gender: </h1>
+                <h1 class="mt-2" id="bday">Birthday:</h1>
+                <h1 class="mt-2" id="address">Address: </h1>
+                <h1 class="mt-2" id="mnum">Mobile Number: </h1>
             </div>
             <!-- User Info -->
         </div>
@@ -86,21 +86,36 @@
 
 </body>
 <script type="text/javascript">
+    var name = document.getElementById("name");
+    var gender = document.getElementById("gender");
+    var bday = document.getElementById("bday");
+    var address = document.getElementById("address");
+    var mnum = document.getElementById("mnum");
     $.ajax({
         url:"ajaxController.php",
         method:"POST",
         data: {
             "getUserId":true,},
             success:function(result) {
-                console.log(result)
+                var userID = result;
                 $.ajax({
                     url:"ajaxController.php",
                     method:"POST",
                     data: {
-                        "getUserData": true
+                        "getUserData": true,
+                        userID:userID,
                     },
                     success:function(result) {
                         console.log(result)
+                        var userData = JSON.parse(result)
+                        userData.forEach(function(data) {
+                            document.getElementById("name").textContent += data['firstName'] + " " + data['lastName'];
+                            document.getElementById("gender").textContent += data['gender'];
+                            document.getElementById("bday").textContent += data['birthday'];
+                            document.getElementById("address").textContent += data['address'];
+                            document.getElementById("mnum").textContent += data['contactNumber'];
+
+                        })
                     }
                 })
             }

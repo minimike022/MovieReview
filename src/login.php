@@ -1,3 +1,65 @@
+<?php
+
+session_start();
+
+include_once ("vendor/autoload.php");
+
+  $google_client = new Google_Client();
+
+  $google_client->setClientId('664943467864-efulhqiu8dqt1pg6j4ft5m766rb5o49k.apps.googleusercontent.com'); //Define your ClientID
+
+  $google_client->setClientSecret('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'); //Define your Client Secret Key
+
+  $google_client->setRedirectUri('http://localhost/MovieReview/src/'); //Define your Redirect Uri
+
+  $google_client->addScope('email');
+
+  $google_client->addScope('profile');
+
+  if(isset($_GET["code"]))
+  {
+   $token = $google_client->fetchAccessTokenWithAuthCode($_GET["code"]);
+
+   if(!isset($token["error"]))
+   {
+    $google_client->setAccessToken($token['access_token']);
+
+    $_SESSION['access_token']=$token['access_token'];
+
+    $google_service = new Google_Service_Oauth2($google_client);
+
+    $data = $google_service->userinfo->get();
+
+    $current_datetime = date('Y-m-d H:i:s');
+
+   // print_r($data);
+
+$_SESSION['first_name']=$data['given_name'];
+$_SESSION['last_name']=$data['family_name'];
+$_SESSION['email_address']=$data['email'];
+$_SESSION['profile_picture']=$data['picture'];
+
+   
+   
+   }
+  }
+  
+  
+  $login_button = '';
+  
+ // echo $_SESSION['access_token'];
+  
+  if(!$_SESSION['access_token'])
+  {
+	//  echo 'test';
+	  
+   $login_button = '<a href="'.$google_client->createAuthUrl().'"><img src="asset/sign-in-with-google.png" /></a>';
+   
+  }
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +74,7 @@
 
         ?>
     </style>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
     <script type="text/javascript" src="js/jquery.min.js"></script>
 </head>

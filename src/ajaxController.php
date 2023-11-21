@@ -31,16 +31,37 @@ if(isset($_POST['datas'])) {
 }
 
 //Getting UserID
+if(isset($_POST['getUserId'])) {
+  session_start();
+  if(isset($_SESSION['userID'])) {
+    echo $_SESSION['userID'];
+  }
+  else {
+    echo "0";
+  }
+}
+
+if(isset($_POST['isRetreiving'])) {
+  session_start();
+  $userID = $_SESSION['userID'];
+  echo json_encode($userID);
+}
+
+
 
 //Getting UserData
 if(isset($_POST['getUserData'])) {
   session_start();
-  $userID = $_SESSION['userID'];
-  $db->fetchData('users', 'usersInfo', 'users.userID', 'usersInfo.userID');
+  $userID = $_POST['userID'];
+  $db->select("usersInfo", "*", "userID = '$userID'");
   echo json_encode($db->res);
 }
 
-
+  if(isset($_POST['isDeliveringUserID'])) {
+    $userID = $_POST['userID'];
+    $_SESSION['userID'] = $userID;
+    echo $userID;
+  }
 
 //Logged In
 if(isset($_POST['isLoggedin'])) {
@@ -51,7 +72,6 @@ if(isset($_POST['isLoggedin'])) {
   else {
     echo "0";
   }
-
 }
 
 //Retrieve User ID
@@ -72,6 +92,18 @@ if (isset($_POST['uname'])) {
   }
 }
 
+if(isset($_POST['signUpRetreiveID'])) {
+  $uname = $_POST['username'];
+  $db->select("users", "*", "uname = '$uname'");
+  echo json_encode($db->res);
+}
+
+if(isset($_POST['isGettingSent'])) {
+  session_start();
+  $userID = $_POST['userID'];
+  $_SESSION['userID'] = $userID;
+  echo json_encode($_SESSION['userID']);
+}
 
 
 //Add User Login Info
@@ -82,23 +114,20 @@ if(isset($_POST['addUser'])) {
   $dataArray = array(
     'uname'=> $postData['uname'], 'pword' => $md5Pass, 'email' => $postData['email'],
   );
-  $result = $db->insert('users', $dataArray);
-  $_SESSION['uname'] = $postData['uname'];
-  echo json_encode($_SESSION['uname']);
+  $db->insert('users', $dataArray);
+  echo json_encode("succeed");
 }
 
 
 //Add User Info
 if (isset($_POST['addUserInfo'])) {
-  $userName = $_SESSION['uname'];
-  $db->fetchUserID($userName);
-  echo json_encode($db->res);
-  $postData = $_POST['datas'];
+  $postData = $_POST['dataArray'];
+  $userID = $_POST['userID'];
   if (empty($postData['lname']) || empty($postData['fname']) || empty($postData['mname']) || empty($postData['bday']) || empty($postData['address']) || empty($postData['cnum'])) {
     echo json_encode(array('error' => 'Please fill in all fields.'));
-    
   } else {
     $data = array(
+      'userID' => $userID,
       'firstName' => $postData['fname'],
       'lastName' => $postData['lname'],
       'middleName' => $postData['mname'],
@@ -107,6 +136,7 @@ if (isset($_POST['addUserInfo'])) {
       'contactNumber' => $postData['cnum'],
       'address' => $postData['address'],
     );
+
 
     $db->insert('usersinfo', $data);
   }
