@@ -1,25 +1,40 @@
 <?php
 session_start();
+
+require "config.php";
+if (isset($_SESSION['token'])) {
+    $client->setAccessToken($_SESSION['token']);
+    if ($client->isAccessTokenExpired()) {
+        unset($_SESSION['token']);
+        header("location: login.php");
+        exit;
+    }
+
+    $user = (new Google_Service_Oauth2($client))->userinfo->get();
+
+}
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Review | Discover Moviews</title>
     <style>
         <?php
-        
-            include "css/output.css";
-        
+
+        include "css/output.css";
+
         ?>
     </style>
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
 </head>
+
 <body class="font-body bg-black">
     <!-- Navigation Header -->
     <div class="w-full h-20 bg-black sticky items-center justify-between flex text-white p-10">
@@ -33,33 +48,44 @@ session_start();
                 <a href="" class="hover:text-red-500 hover:text-xl">New & Popular</a>
             </div>
             <form method="POST" action="" class="ml-4 flex items-center border-none">
-                <input type="text" placeholder="Search:" id="live_Search" name="search" id="search" class="rounded-lg h-10 w-[20em] border-2 border-white bg-black focus:outline-none focus:border-red-500 pl-6">
+                <input type="text" placeholder="Search:" id="live_Search" name="search" id="search"
+                    class="rounded-lg h-10 w-[20em] border-2 border-white bg-black focus:outline-none focus:border-red-500 pl-6">
             </form>
         </div>
-        
+
 
         <!-- Users Buttons -->
         <div id="notloggedIn">
             <div class="flex items-center justify-between w-[13em]">
-                <a href="signup.php" class="h-[2.5em] w-24 flex items-center justify-center border-2 border-white rounded-md hover:bg-red-500 hover:border-none active:bg-red-600">
+                <a href="signup.php"
+                    class="h-[2.5em] w-24 flex items-center justify-center border-2 border-white rounded-md hover:bg-red-500 hover:border-none active:bg-red-600">
                     <h1 class="text-white font-bold">Register</h1>
-                </a> 
-                <a href="login.php" class="h-[2.5em] w-24 flex items-center justify-center bg-white rounded-md hover:bg-red-500 hover:border-none active:bg-red-600">
+                </a>
+                <a href="login.php"
+                    class="h-[2.5em] w-24 flex items-center justify-center bg-white rounded-md hover:bg-red-500 hover:border-none active:bg-red-600">
                     <h1 class="text-black font-bold">Sign In</h1>
                 </a>
             </div>
         </div>
         <div id="loggedIn">
             <div class="flex items-center justify-between w-[13em]">
-                <a href="userProfile.php" class="h-[2.5em] w-24 flex items-center justify-center rounded-md hover:bg-red-500 hover:border-none active:bg-red-600">
+                <a href="userProfile.php"
+                    class="h-[2.5em] w-24 flex items-center justify-center rounded-md hover:bg-red-500 hover:border-none active:bg-red-600">
                     <h1 class="text-white font-bold">Profile</h1>
-                </a> 
-                <a href="logout.php" class="h-[2.5em] w-24 flex items-center justify-center bg-white rounded-md hover:bg-red-500 hover:border-none active:bg-red-600 text-black hover:text-white">
+                </a>
+                <a href="logout.php"
+                    class="h-[2.5em] w-24 flex items-center justify-center bg-white rounded-md hover:bg-red-500 hover:border-none active:bg-red-600 text-black hover:text-white">
                     <h1 class="font-bold">Sign Out</h1>
                 </a>
             </div>
         </div>
     </div>
+    <h1 class="text-white">
+        <?php
+
+
+        ?>
+    </h1>
 
     <!-- Featured -->
     <div class="w-full h-[32em] bg-landingImage bg-cover font-body text-white overflow-hidden">
@@ -68,7 +94,8 @@ session_start();
             <!-- Movie Title -->
             <h1 class="text-3xl font-extrabold">John Wick(2014)</h1>
             <!-- Movie Description -->
-            <p class="w-[35em] mt-2 text-lg"> John wick is a retired assassin who returns back to his old ways after a group of Russian gangsters steal his car
+            <p class="w-[35em] mt-2 text-lg"> John wick is a retired assassin who returns back to his old ways after a
+                group of Russian gangsters steal his car
                 kill a puppy which was gifted to him by his late wife Helen.
             </p>
             <!-- Stars and Ratings -->
@@ -100,104 +127,117 @@ session_start();
     var loggedIn = document.getElementById("loggedIn");
     var notLoggedIn = document.getElementById("notloggedIn");
 
+    $.ajax({
+        url: "ajaxController.php",
+        method: "POST",
+        data: {
+            "isGettingGoogleUser": true,
+        },
+        success: function (result) {
+            console.log(result)
+        }
+    })
+
+
     const loadMovies = () => {
         $.ajax({
-        url:"ajaxController.php",
-        method:"POST",
-        data: {"fetchMovies":true},
-        success:function(result) {
-            var datas = JSON.parse(result);
-            var movieTr = ` `
-            console.log(datas)
-            datas.forEach(function(data){
-                movieTr += `<td class='h-[26em] w-[20em] py-4 bg-white rounded-lg flex items-center flex-col ml-10 mt-10'><button id="button" data-ids=`+data['movieID']+`><img src="`+data['moviePhoto']+`" data-Ids=`+data['movieID']+` class='h-[18em] w-[18em] rounded-lg'></button>`
-                movieTr += `<h1 class="mt-4 font-bold text-2xl">`+data['movieTitle']+`</h1>`
-                movieTr += `<h1 class="mt-4 text-xl">`+data['movieGenre']+` | `+data['movieDate']+`</h1>`
-            })
-            $('#movies').html(movieTr);
-        }
-        
+            url: "ajaxController.php",
+            method: "POST",
+            data: { "fetchMovies": true },
+            success: function (result) {
+                var datas = JSON.parse(result);
+                var movieTr = ` `
+                console.log(datas)
+                datas.forEach(function (data) {
+                    movieTr += `<td class='h-[26em] w-[20em] py-4 bg-white rounded-lg flex items-center flex-col ml-10 mt-10'><button id="button" data-ids=` + data['movieID'] + `><img src="` + data['moviePhoto'] + `" data-Ids=` + data['movieID'] + ` class='h-[18em] w-[18em] rounded-lg'></button>`
+                    movieTr += `<h1 class="mt-4 font-bold text-2xl">` + data['movieTitle'] + `</h1>`
+                    movieTr += `<h1 class="mt-4 text-xl">` + data['movieGenre'] + ` | ` + data['movieDate'] + `</h1>`
+                })
+                $('#movies').html(movieTr);
+            }
+
         })
     }
     loadMovies();
-   $(document).ready(function() {
+    $(document).ready(function () {
         loadMovies();
-    $(document).on("click", "#button", function(e) {
-        var dataID = $(this).attr('data-Ids');
-        console.log(dataID)
-        $.ajax({
-            url: "ajaxController.php",
-            method:"POST",
-            data:{
-                "deliveringData":true,
-                dataId:dataID
-            },
-            success:function(result)  { 
-                console.log(result)
-                location.href = "landingMovie.php"
-            }
-        }) 
-    })
-
-        $.ajax({
-        url:"ajaxController.php",
-        method: "POST",
-        data: {
-            "isLoggedin":true
-        },
-        success:function(result) {
-            var userID =result
+        $(document).on("click", "#button", function (e) {
+            var dataID = $(this).attr('data-Ids');
+            console.log(dataID)
             $.ajax({
-                url:"ajaxController.php",
-                method:"POST",
+                url: "ajaxController.php",
+                method: "POST",
                 data: {
-                    "isDeliveringUserID": true,
-                    userID:userID,
+                    "deliveringData": true,
+                    dataId: dataID
                 },
-                success:function(result) {
+                success: function (result) {
                     console.log(result)
+                    location.href = "landingMovie.php"
                 }
             })
-            
-            if(result == 0) {
-                loggedIn.style.display = "none";
-                notLoggedIn.style.display = "block"
-            }
-            else {
-                loggedIn.style.display = "block";
-                notLoggedIn.style.display = "none"
-            }
-        }
-    })
-   })
+        })
 
-   $('#live_Search').keyup(function(e) {
-            e.preventDefault()
-            var liveSearch = $(this).val();
-            if(liveSearch != '') {
+        $.ajax({
+            url: "ajaxController.php",
+            method: "POST",
+            data: {
+                "isLoggedin": true
+            },
+            success: function (result) {
+                var userID = result
                 $.ajax({
-                    url:"ajaxController.php",
-                    method:"POST",
+                    url: "ajaxController.php",
+                    method: "POST",
                     data: {
-                        live_Search:liveSearch
+                        "isDeliveringUserID": true,
+                        userID: userID,
                     },
-                    success:function(result) {
-                        var datas = JSON.parse(result);
-                        var movieTr = ` `
-                        console.log(datas)
-                        datas.forEach(function(data){
-                            movieTr += `<td class='h-[28em] w-[20em] py-4 bg-white rounded-lg flex items-center flex-col ml-10 mt-10'><button id="button" data-ids=`+data['movieID']+`><img src="`+data['moviePhoto']+`" data-Ids=`+data['movieID']+` class='h-[18em] w-[18em] rounded-lg'></button>`
-                            movieTr += `<h1 class="mt-4 font-bold text-2xl">`+data['movieTitle']+`</h1>`
-                            movieTr += `<h1 class="mt-4 text-base">`+data['movieGenre']+` | `+data['movieDate']+`</h1>`
-                        })
-                        $('#movies').html(movieTr);
-                     }
+                    success: function (result) {
+                        console.log(result)
+                    }
                 })
-            } else{
-                loadMovies()
+
+                if (result == 0) {
+                    loggedIn.style.display = "none";
+                    notLoggedIn.style.display = "block"
+                }
+                else {
+                    loggedIn.style.display = "block";
+                    notLoggedIn.style.display = "none"
+                }
             }
         })
-   
+    })
+
+    $('#live_Search').keyup(function (e) {
+        e.preventDefault()
+        var liveSearch = $(this).val();
+        if (liveSearch != '') {
+            $.ajax({
+                url: "ajaxController.php",
+                method: "POST",
+                data: {
+                    live_Search: liveSearch
+                },
+                success: function (result) {
+                    var datas = JSON.parse(result);
+                    var movieTr = ` `
+                    console.log(datas)
+                    datas.forEach(function (data) {
+                        movieTr += `<td class='h-[28em] w-[20em] py-4 bg-white rounded-lg flex items-center flex-col ml-10 mt-10'><button id="button" data-ids=` + data['movieID'] + `><img src="` + data['moviePhoto'] + `" data-Ids=` + data['movieID'] + ` class='h-[18em] w-[18em] rounded-lg'></button>`
+                        movieTr += `<h1 class="mt-4 font-bold text-2xl">` + data['movieTitle'] + `</h1>`
+                        movieTr += `<h1 class="mt-4 text-base">` + data['movieGenre'] + ` | ` + data['movieDate'] + `</h1>`
+                    })
+                    $('#movies').html(movieTr);
+                }
+            })
+        } else {
+            loadMovies()
+        }
+    })
+
 
 </script>
+
 </html>

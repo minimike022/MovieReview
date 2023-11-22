@@ -1,28 +1,16 @@
 <?php
-
-//start session on web page
-session_start();
-
-//config.php
-
-//Include Google Client Library for PHP autoload file
 require_once 'vendor/autoload.php';
 
-//Make object of Google API Client for call Google API
-$google_client = new Google_Client();
+// init configuration
+$clientID = '664943467864-bb0pubsh06s6kvrot0d2l4mcvg37hm00.apps.googleusercontent.com';
+$clientSecret = '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';
+$redirectUri = 'http://localhost/MovieReview/src/login.php';
 
-//Set the OAuth 2.0 Client ID
-$google_client->setClientId('664943467864-efulhqiu8dqt1pg6j4ft5m766rb5o49k.apps.googleusercontent.com');
-
-//Set the OAuth 2.0 Client Secret key
-$google_client->setClientSecret('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');
-
-//Set the OAuth 2.0 Redirect URI
-$google_client->setRedirectUri('http://localhost/MovieReview/src/index.php');
-
-// to get the email and profile 
-$google_client->addScope('email');
-
-$google_client->addScope('profile');
-
+// create Client Request to access Google API
+$client = new Google_Client();
+$client->setClientId($clientID);
+$client->setClientSecret($clientSecret);
+$client->setRedirectUri($redirectUri);
+$client->addScope("email");
+$client->addScope("profile");
 ?>

@@ -3,6 +3,12 @@ require "db/movieDB.php";
 
 $db = new DB();
 
+if(isset($_POST['isGettingGoogleUser'])){
+  session_start();
+  $userID = $_SESSION['userID'];
+  echo $userID;
+}
+
 if(isset($_POST['loggedIn'])) {
   session_start();
   $data = $_SESSION['userID'];
@@ -56,12 +62,6 @@ if(isset($_POST['getUserData'])) {
   $db->select("usersInfo", "*", "userID = '$userID'");
   echo json_encode($db->res);
 }
-
-  if(isset($_POST['isDeliveringUserID'])) {
-    $userID = $_POST['userID'];
-    $_SESSION['userID'] = $userID;
-    echo $userID;
-  }
 
 //Logged In
 if(isset($_POST['isLoggedin'])) {
